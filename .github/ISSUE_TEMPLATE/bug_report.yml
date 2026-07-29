@@ -1,0 +1,47 @@
+name: Bug report
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Include your Supabase project type (cloud/self-hosted) and whether SQL helpers are installed.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run setup_supabase_functions.sql
+        2. Connect with project URL + anon key
+        3. Select table "posts" → Analyze
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Local dev (npm run dev)
+        - Vercel / static host
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I installed setup_supabase_functions.sql in my Supabase project
+          required: false
+        - label: I searched existing issues before opening this report
+          required: true
