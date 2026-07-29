@@ -5,6 +5,7 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="MIT License" />
+  <img src="https://img.shields.io/github/actions/workflow/status/habinrahman/rls-inspector/ci.yml?branch=main&label=CI&style=for-the-badge" alt="CI" />
 </p>
 
 <h1 align="center">RLS Inspector</h1>
