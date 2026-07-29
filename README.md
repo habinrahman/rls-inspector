@@ -38,6 +38,13 @@ RLS Inspector reads policy metadata directly from `pg_policies`, normalizes it, 
 
 ## Preview
 
+![RLS Inspector demo](docs/screenshots/demo.gif)
+
+<p align="center"><em>Recorded with mocked Supabase RPCs — no live project required. Re-record: <code>npm run record:demo</code></em></p>
+
+<details>
+<summary>ASCII preview (static)</summary>
+
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
 │ RLS Inspector · Supabase debugger                  ● nwkxop…supabase.co │
@@ -62,6 +69,8 @@ RLS Inspector reads policy metadata directly from `pg_policies`, normalizes it, 
 │                  WITH CHECK (auth.uid() = user_id);         [Copy SQL]  │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
+
+</details>
 
 ---
 

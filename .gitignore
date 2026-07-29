@@ -37,3 +37,8 @@ Thumbs.db
 
 # Vercel
 .vercel
+
+# Playwright demo artifacts (demo.gif is committed)
+test-results/
+playwright-report/
+docs/screenshots/.palette.png
