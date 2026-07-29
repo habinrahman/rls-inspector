@@ -6,6 +6,7 @@
   <img src="https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="MIT License" />
   <img src="https://img.shields.io/github/actions/workflow/status/habinrahman/rls-inspector/ci.yml?branch=main&label=CI&style=for-the-badge" alt="CI" />
+  <img src="https://img.shields.io/badge/tests-vitest-brightgreen?style=for-the-badge&logo=vitest&logoColor=white" alt="Tests" />
 </p>
 
 <h1 align="center">RLS Inspector</h1>
@@ -349,7 +350,7 @@ DROP FUNCTION IF EXISTS public.get_table_row_count(TEXT);
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/<your-username>/rls-inspector.git
+git clone https://github.com/habinrahman/rls-inspector.git
 cd rls-inspector
 npm install
 npm run dev
@@ -389,6 +390,8 @@ The dev server starts on `http://localhost:5173` and opens automatically.
 npm run dev        # Vite dev server on :5173 with HMR, auto-open
 npm run build      # Production bundle to dist/
 npm run preview    # Serve production build on :4173
+npm test           # Vitest unit tests for lib/analysis.js
+npm run test:watch # Watch mode
 ```
 
 ### Environment Variables
@@ -523,9 +526,7 @@ Stated explicitly because honesty builds trust:
 | **No role grant checking** | A policy naming an ungranted role will appear "fine" structurally | Check `pg_roles` manually |
 | **`public` schema only** | Internal schemas and non-public tables are excluded | Modify `get_all_tables()` to support other schemas |
 | **`*.supabase.co` URLs only** | Self-hosted Supabase or custom domains are rejected by client-side validation | Modify the regex in `ConnectionForm.jsx` |
-| **No tests** | Zero test files in the repository | See Roadmap |
-| **No CI/CD** | No GitHub Actions, no automated build verification | See Roadmap |
-| **`testPolicyCondition()` and `extractColumnsFromCondition()`** | Exported from `analysis.js` but never imported — scaffolding for future runtime analysis | Not yet integrated |
+| **`testPolicyCondition()` and `extractColumnsFromCondition()`** | Exported from `analysis.js` but not wired into the UI — scaffolding for future runtime analysis | Not yet integrated |
 
 ---
 
@@ -538,37 +539,49 @@ Stated explicitly because honesty builds trust:
 | **Snapshot diffing** | Paste yesterday's `pg_dump --schema-only` and today's; flag every policy that changed | Medium |
 | **Markdown audit export** | One-click "policy audit report" for SOC-2 / HIPAA paperwork | Low |
 | **Multi-schema support** | Drop the `WHERE schemaname = 'public'` constraint, add a schema picker | Low |
-| **Test suite** | Unit tests for `analysis.js`, integration tests for the RPC flow | Medium |
-| **CI/CD pipeline** | GitHub Actions for lint, build, and deploy verification | Low |
+| **Test suite** | Unit tests for `analysis.js` via Vitest | ✅ Done |
+| **CI/CD pipeline** | GitHub Actions for test, build, and audit | ✅ Done |
 | **Self-hosted Supabase support** | Relax URL validation regex to accept custom domains | Low |
 
 PRs welcome on any of these.
 
 ---
 
+## FAQ
+
+<details>
+<summary><strong>Is it safe to enter my anon key?</strong></summary>
+
+The anon key is **designed to be public** — it ships in your frontend. RLS Inspector sends it only to **your** Supabase project over HTTPS. Credentials live in React state and are cleared on refresh. They are never sent to any third-party server.
+
+</details>
+
+<details>
+<summary><strong>Why do I need setup_supabase_functions.sql?</strong></summary>
+
+The `anon` role cannot read `pg_policies`, `pg_class`, or `auth.users` through PostgREST by default. The four `SECURITY DEFINER` helpers expose read-only catalog metadata so the tool can list policies.
+
+</details>
+
+<details>
+<summary><strong>Can this tool impersonate a user and test policies at runtime?</strong></summary>
+
+Not yet. Static analysis inspects policy **structure** (missing `WITH CHECK`, `USING (true)`, etc.). True impersonation requires signing a JWT with your project's JWT secret — on the [roadmap](#roadmap).
+
+</details>
+
+<details>
+<summary><strong>Should I install the SQL helpers on production?</strong></summary>
+
+For production databases with real user data, prefer granting `EXECUTE` to `authenticated` only (not `anon`), or use the tool against a staging project that mirrors production policies.
+
+</details>
+
+---
+
 ## Contributing
 
-Contributions welcome, especially on the roadmap items above.
-
-### Ground rules
-
-1. **No new dependencies without a paragraph of justification in the PR description.** The 9-dependency total is small on purpose.
-2. **No emoji icons in the UI.** Lucide already covers every icon the tool needs. Emoji are fine in commit messages and PR descriptions.
-
-### PR flow
-
-```bash
-git checkout -b feat/your-feature
-# ... edits ...
-npm run build              # must pass
-git commit -m "feat: ..."
-git push -u origin feat/your-feature
-# Open a pull request
-```
-
-### Code style
-
-No ESLint or Prettier configs are included. The codebase uses consistent conventions: functional components, `useCallback` for stable references, `useEffect` for side effects, Tailwind for all styling. Match the existing patterns.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Security: [SECURITY.md](SECURITY.md). Community standards: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Changes: [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
